@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Creando un modelo para interactuar con la bd
+
+// Productos
+model Producto {
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  precio      Float
+  imagen      String?
+  // Hacemos relación a una Categoria (Llave foránea
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  categoriaId Int
+}
+
+// El simbolo ? hace el campo opcional
+
+// Categoria
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  icono     String
+  // Una categoria puede tener multiples productos "[]"
+  productos Producto[]
+}
+
+// Ordenes
+model Orden {
+  id     Int     @id @default(autoincrement())
+  nombre String
+  fecha  String
+  total  Float
+  pedido Json
+  estado Boolean @default(false)
+}
